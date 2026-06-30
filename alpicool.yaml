@@ -1,0 +1,102 @@
+substitutions:
+  name: alpicool-fridge
+  friendly_name: "Alpicool Fridge"
+  fridge_mac: "ff:12:18:60:19:70"
+
+esphome:
+  name: ${name}
+  friendly_name: ${friendly_name}
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+logger:
+  level: DEBUG
+
+api:
+
+ota:
+  - platform: esphome
+
+wifi:
+  ssid: "wifi"
+  password: "13579246"
+  fast_connect: true
+  ap:
+    ssid: "Alpicool-Fridge-Fallback"
+    password: "password123"
+
+captive_portal:
+
+external_components:
+  - source:
+      type: git
+      url: https://github.com
+      ref: main
+    components: [alpicool]
+
+esp32_ble_tracker:
+  scan_parameters:
+    interval: 1000ms
+    window: 500ms
+    active: true
+
+ble_client:
+  - mac_address: ${fridge_mac}
+    id: alpicool_ble
+
+alpicool:
+  id: alpicool_device
+  ble_client_id: alpicool_ble
+  update_interval: 2s
+
+sensor:
+  - platform: alpicool
+    alpicool_id: alpicool_device
+    current_temperature:
+      name: "Current Temperature"
+      id: alpicool_current_temp
+    target_temperature:
+      name: "Target Temperature"
+      id: alpicool_target_temp
+    input_voltage:
+      name: "Input Voltage"
+      id: alpicool_voltage
+    right_current_temperature:
+      name: "Right Current Temperature"
+      id: alpicool_right_current_temp
+    right_target_temperature:
+      name: "Right Target Temperature"
+      id: alpicool_right_target_temp
+
+binary_sensor:
+  - platform: alpicool
+    alpicool_id: alpicool_device
+    connected:
+      name: "Connected"
+      id: alpicool_connected
+    running:
+      name: "Compressor Running"
+      id: alpicool_running
+
+switch:
+  - platform: alpicool
+    alpicool_id: alpicool_device
+    power:
+      name: "Power"
+      id: alpicool_power
+    eco_mode:
+      name: "Eco Mode"
+      id: alpicool_eco
+
+number:
+  - platform: alpicool
+    alpicool_id: alpicool_device
+    target_temperature:
+      name: "Set Temperature"
+      id: alpicool_set_temp
+    right_target_temperature:
+      name: "Set Right Temperature"
+      id: alpicool_set_right_temp
