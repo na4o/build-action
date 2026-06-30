@@ -1,4 +1,8 @@
-name: Build ESPHome Cloud
+      - name: Install Git and ESPHome
+        run: |
+          sudo apt-get update && sudo apt-get install -y git
+          pip install platformio esphome
+
 
 on:
   workflow_dispatch:
