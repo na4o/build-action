@@ -1,7 +1,7 @@
-name: Build ESPHome
+name: Build ESPHome Cloud
 
 on:
-  workflow_dispatch: # Позволява ни да стартираме компилацията ръчно с един бутон
+  workflow_dispatch:
 
 jobs:
   build:
@@ -10,16 +10,22 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Compile ESPHome Firmware
-        uses: esphome/build-action@v6
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          yaml-file: alpicool.yaml
-          version: latest
+          python-version: '3.11'
 
-      - name: Upload Firmware Artifact
+      - name: Install ESPHome
+        run: |
+          pip install platformio
+          pip install esphome
+
+      - name: Compile Firmware
+        run: |
+          esphome compile alpicool.yaml
+
+      - name: Upload Firmware File
         uses: actions/upload-artifact@v4
         with:
-          name: alpicool-firmware
-          path: |
-            */alpicool-fridge.factory.bin
-            */manifest.json
+          name: alpicool-fridge-firmware
+          path: .esphome/build/alpicool-fridge/.pioenvs/alpicool-fridge/firmware.bin
