@@ -29,6 +29,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: alpicool-fridge-firmware
-          path: |
-            .esphome/build/alpicool-fridge/.pioenvs/alpicool-fridge/firmware.bin
-            .esphome/build/alpicool-fridge/.pioenvs/alpicool-fridge/firmware.elf
+          path: .esphome/build/alpicool-fridge/**/*.bin
