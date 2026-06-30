@@ -15,11 +15,10 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install Git and ESPHome
+      - name: Install ESPHome Dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y git
-          pip install platformio
           pip install esphome
 
       - name: Compile Firmware
@@ -30,4 +29,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: alpicool-fridge-firmware
-          path: .esphome/build/alpicool-fridge/.pioenvs/alpicool-fridge/firmware.bin
+          path: |
+            .esphome/build/alpicool-fridge/.pioenvs/alpicool-fridge/firmware.bin
+            .esphome/build/alpicool-fridge/.pioenvs/alpicool-fridge/firmware.elf
